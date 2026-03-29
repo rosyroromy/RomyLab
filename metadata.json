@@ -1,0 +1,5 @@
+{
+  "name": "MovieEcho",
+  "description": "A cinematic screenshot stitching and subtitle translation app.",
+  "requestFramePermissions": []
+}
