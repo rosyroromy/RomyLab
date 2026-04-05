@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, GripVertical, Sparkles } from 'lucide-react';
+import { CaretLeft, DotsSixVertical, Sparkle } from '@phosphor-icons/react';
 import { motion, Reorder, useDragControls } from 'motion/react';
 import { ProjectData, Frame, Movie } from '../types';
 
@@ -84,6 +84,7 @@ export default function Editor({
   onBack: () => void;
 }) {
   const [frames, setFrames] = useState(initialFrames);
+  const [editedTitle, setEditedTitle] = useState(movie.title);
 
   const handleTextChange = (id: string, field: 'text' | 'translation', value: string) => {
     setFrames(frames.map(f => f.id === id ? { ...f, [field]: value } : f));
@@ -99,19 +100,19 @@ export default function Editor({
         <button onClick={onBack} className="p-2 -ml-2 text-white/70 hover:text-white transition-colors">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center flex-1 mx-4">
           <span className="text-sm font-medium">Editor</span>
-          <motion.div 
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-1 text-[10px] text-[#FFB800] bg-[#FFB800]/10 px-2 py-0.5 rounded-full mt-0.5"
-          >
-            <Sparkles className="w-3 h-3" />
-            <span>Detected: {movie.title}</span>
-          </motion.div>
+          <div className="flex items-center gap-1 mt-0.5 w-full justify-center">
+            <Sparkles className="w-3 h-3 text-[#FFB800]" />
+            <input 
+              value={editedTitle}
+              onChange={e => setEditedTitle(e.target.value)}
+              className="bg-transparent text-center text-[10px] text-[#FFB800] focus:outline-none focus:border-b focus:border-[#FFB800]/50 w-full max-w-[120px]"
+            />
+          </div>
         </div>
         <button
-          onClick={() => onPreview({ frames, movie })}
+          onClick={() => onPreview({ frames, movie: { ...movie, title: editedTitle } })}
           className="p-2 -mr-2 text-[#FFB800] font-medium text-sm transition-opacity"
         >
           Next

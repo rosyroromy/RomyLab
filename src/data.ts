@@ -1,10 +1,10 @@
 import { Movie, Frame } from './types';
 
 export const MOCK_MOVIES: Movie[] = [
-  { id: 'm1', title: 'Manchester by the Sea', year: '2016', score: '7.8', region: 'US', poster: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?q=80&w=800&auto=format&fit=crop', addedAt: 1600000000000 },
-  { id: 'm2', title: 'Blade Runner 2049', year: '2017', score: '8.0', region: 'US', poster: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop', addedAt: 1610000000000 },
-  { id: 'm3', title: 'Interstellar', year: '2014', score: '8.7', region: 'UK', poster: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=800&auto=format&fit=crop', addedAt: 1620000000000 },
-  { id: 'm4', title: 'In the Mood for Love', year: '2000', score: '8.1', region: 'Hong Kong', poster: 'https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=800&auto=format&fit=crop', addedAt: 1630000000000 },
+  { id: 'm1', title: 'Manchester by the Sea', year: '2016', score: '7.8', region: 'US', poster: 'https://image.tmdb.org/t/p/original/w2tE7l4G75Hh8e30H3dF6H4yOQe.jpg', addedAt: 1600000000000 },
+  { id: 'm2', title: 'Blade Runner 2049', year: '2017', score: '8.0', region: 'US', poster: 'https://image.tmdb.org/t/p/original/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg', addedAt: 1610000000000 },
+  { id: 'm3', title: 'Interstellar', year: '2014', score: '8.7', region: 'UK', poster: 'https://image.tmdb.org/t/p/original/gEU2QlsUUHXjNpebbDOvCZzypwC.jpg', addedAt: 1620000000000 },
+  { id: 'm4', title: 'In the Mood for Love', year: '2000', score: '8.1', region: 'Hong Kong', poster: 'https://image.tmdb.org/t/p/original/iYypPT4OqTDX4DClqOQ4Q8Qz6z.jpg', addedAt: 1630000000000 },
 ];
 
 export const MOCK_FRAMES: Frame[] = [

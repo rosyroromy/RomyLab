@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { ScanLine } from 'lucide-react';
+import { Scan } from '@phosphor-icons/react';
 
 const steps = [
   "Uploading frames...",
@@ -12,11 +12,25 @@ const steps = [
 
 export default function LoadingOverlay() {
   const [step, setStep] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setStep(s => Math.min(s + 1, steps.length - 1));
     }, 800);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(p => {
+        if (p >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return p + 2;
+      });
+    }, 80); // 100% in ~4 seconds
     return () => clearInterval(interval);
   }, []);
 
@@ -47,7 +61,7 @@ export default function LoadingOverlay() {
       </div>
 
       {/* Text */}
-      <div className="h-8 relative w-full flex justify-center">
+      <div className="h-8 relative w-full flex justify-center mb-4">
         <motion.p
           key={step}
           initial={{ opacity: 0, y: 10 }}
@@ -58,6 +72,17 @@ export default function LoadingOverlay() {
           {steps[step]}
         </motion.p>
       </div>
+
+      {/* Progress Bar */}
+      <div className="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10">
+        <motion.div 
+          className="h-full bg-[#FFB800]"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ ease: "linear" }}
+        />
+      </div>
+      <div className="mt-2 text-xs text-[#FFB800] font-mono relative z-10">{progress}%</div>
     </div>
   );
 }

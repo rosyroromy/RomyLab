@@ -1,12 +1,13 @@
 import { useState, useRef, useMemo } from 'react';
-import { Plus, Star, Search, ArrowUpDown, Filter } from 'lucide-react';
+import { Plus, Star, MagnifyingGlass, ArrowsDownUp, Faders } from '@phosphor-icons/react';
 import { Movie } from '../types';
-import { MOCK_MOVIES } from '../data';
 
 export default function Home({ 
+  movies,
   onMovieSelect, 
   onUpload 
 }: { 
+  movies: Movie[];
   onMovieSelect: (movieId: string) => void;
   onUpload: (files: File[]) => void;
 }) {
@@ -22,7 +23,7 @@ export default function Home({
   };
 
   const filteredAndSortedMovies = useMemo(() => {
-    let result = [...MOCK_MOVIES];
+    let result = [...movies];
 
     // Filter by search
     if (searchQuery) {
@@ -41,7 +42,7 @@ export default function Home({
     });
 
     return result;
-  }, [searchQuery, sortOrder, regionFilter]);
+  }, [searchQuery, sortOrder, regionFilter, movies]);
 
   return (
     <div className="pb-24 min-h-full">
@@ -52,7 +53,7 @@ export default function Home({
         {/* Search & Filter Bar */}
         <div className="flex gap-2 mt-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
             <input
               type="text"
               placeholder="Search movies..."

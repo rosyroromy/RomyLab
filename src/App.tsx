@@ -1,17 +1,24 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import Home from './components/Home';
+import MainLayout from './components/MainLayout';
 import Editor from './components/Editor';
 import Preview from './components/Preview';
 import MovieDetails from './components/MovieDetails';
 import LoadingOverlay from './components/LoadingOverlay';
 import FrameDetail from './components/FrameDetail';
+import Onboarding from './components/Onboarding';
+import PermissionModal from './components/PermissionModal';
 import { Movie, Frame, ProjectData } from './types';
 import { MOCK_MOVIES, MOCK_FRAMES } from './data';
 
 type ViewState = 'home' | 'movie' | 'loading' | 'editor' | 'preview' | 'frame-detail';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const [movies, setMovies] = useState<Movie[]>(MOCK_MOVIES);
+  const [allFrames, setAllFrames] = useState<Frame[]>(MOCK_FRAMES);
+  
   const [currentView, setCurrentView] = useState<ViewState>('home');
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
   const [selectedFrame, setSelectedFrame] = useState<Frame | null>(null);
@@ -33,13 +40,51 @@ export default function App() {
         offsetY: 50,
         timestamp: Date.now() + i
       }));
-      setEditorData({ frames: newFrames, movie: MOCK_MOVIES[0] });
+      setEditorData({ frames: newFrames, movie: movies[0] });
       setCurrentView('editor');
     }, 4500);
   };
 
-  const selectedMovie = MOCK_MOVIES.find(m => m.id === selectedMovieId);
-  const movieFrames = MOCK_FRAMES.filter(f => f.movieId === selectedMovieId).sort((a, b) => a.timestamp - b.timestamp);
+  const handleSave = (action: 'replace' | 'new-copy' | 'download') => {
+    if ((action === 'new-copy' || action === 'replace') && projectData) {
+      // Check if the title was changed and doesn't exist
+      const existingMovie = movies.find(m => m.title === projectData.movie.title);
+      let targetMovieId = existingMovie?.id;
+
+      if (!existingMovie && action === 'new-copy') {
+        const newMovie: Movie = {
+          ...projectData.movie,
+          id: `m_${Date.now()}`,
+          dateAdded: new Date().toISOString()
+        };
+        setMovies([newMovie, ...movies]);
+        targetMovieId = newMovie.id;
+      }
+
+      // Save frames
+      if (targetMovieId) {
+        const newFrames = projectData.frames.map(f => ({ ...f, movieId: targetMovieId }));
+        setAllFrames([...newFrames, ...allFrames]);
+      }
+    }
+    setCurrentView('home');
+  };
+
+  const selectedMovie = movies.find(m => m.id === selectedMovieId);
+  const movieFrames = allFrames.filter(f => f.movieId === selectedMovieId).sort((a, b) => a.timestamp - b.timestamp);
+
+  if (!isLoggedIn) {
+    return (
+      <div className="w-full min-h-screen bg-black text-white flex justify-center">
+        <div className="w-full max-w-[430px] min-h-screen relative overflow-hidden bg-[#0A0A0A] shadow-2xl border-x border-white/5">
+          <Onboarding onLogin={() => {
+            setIsLoggedIn(true);
+            setShowPermissionModal(true);
+          }} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen bg-black text-white flex justify-center">
@@ -54,7 +99,8 @@ export default function App() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="absolute inset-0 overflow-y-auto"
             >
-              <Home 
+              <MainLayout 
+                movies={movies}
                 onMovieSelect={(id) => {
                   setSelectedMovieId(id);
                   setCurrentView('movie');
@@ -151,9 +197,18 @@ export default function App() {
               <Preview
                 data={projectData}
                 onBack={() => setCurrentView('editor')}
-                onSave={() => setCurrentView('home')}
+                onSave={handleSave}
               />
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showPermissionModal && (
+            <PermissionModal 
+              onAllow={() => setShowPermissionModal(false)}
+              onDeny={() => setShowPermissionModal(false)}
+            />
           )}
         </AnimatePresence>
       </div>

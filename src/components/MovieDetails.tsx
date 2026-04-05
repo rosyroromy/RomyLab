@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, Search, CheckSquare, Square, Scissors } from 'lucide-react';
+import { CaretLeft, MagnifyingGlass, CheckSquare, Square, Scissors } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { Movie, Frame } from '../types';
 
@@ -70,7 +70,7 @@ export default function MovieDetails({
       {/* Toolbar */}
       <div className="px-4 sticky top-0 z-30 bg-[#0A0A0A]/90 backdrop-blur-xl py-3 border-b border-white/5 flex gap-2">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
           <input
             type="text"
             placeholder="Search lines..."

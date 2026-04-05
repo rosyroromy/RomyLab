@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { ChevronLeft, Download, Library, Trash2, Copy } from 'lucide-react';
+import { CaretLeft, DownloadSimple, Books, Trash, Copy } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ProjectData } from '../types';
 
-export default function Preview({ data, onBack, onSave }: { data: ProjectData | null, onBack: () => void, onSave: () => void }) {
+export default function Preview({ data, onBack, onSave }: { data: ProjectData | null, onBack: () => void, onSave: (action: 'replace' | 'new-copy' | 'download') => void }) {
   const [showSaveOptions, setShowSaveOptions] = useState(false);
 
   if (!data) return null;
@@ -84,14 +84,14 @@ export default function Preview({ data, onBack, onSave }: { data: ProjectData | 
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               className="absolute bottom-full left-6 right-6 mb-4 bg-[#1A1A1A] border border-white/10 rounded-2xl p-2 flex flex-col gap-1 shadow-2xl origin-bottom"
             >
-              <button onClick={onSave} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left">
+              <button onClick={() => onSave('replace')} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left">
                 <div className="bg-white/10 p-2 rounded-lg"><Trash2 className="w-4 h-4 text-[#FFB800]" /></div>
                 <div>
                   <p className="text-sm font-medium text-white">Merge & Replace</p>
                   <p className="text-[10px] text-white/50 mt-0.5">Save to archive and delete original frames</p>
                 </div>
               </button>
-              <button onClick={onSave} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left">
+              <button onClick={() => onSave('new-copy')} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left">
                 <div className="bg-white/10 p-2 rounded-lg"><Copy className="w-4 h-4 text-white" /></div>
                 <div>
                   <p className="text-sm font-medium text-white">Save as New Copy</p>
@@ -110,7 +110,7 @@ export default function Preview({ data, onBack, onSave }: { data: ProjectData | 
             Save to Archive
           </button>
           <button
-            onClick={onSave}
+            onClick={() => onSave('download')}
             className="flex-1 py-3.5 rounded-2xl bg-[#FFB800] text-black font-semibold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,184,0,0.2)] hover:shadow-[0_0_25px_rgba(255,184,0,0.3)]"
           >
             <Download className="w-4 h-4" />

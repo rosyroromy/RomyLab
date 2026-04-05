@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, BookOpen } from 'lucide-react';
+import { CaretLeft, BookOpen } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Frame } from '../types';
 
